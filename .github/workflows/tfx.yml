@@ -1,0 +1,25 @@
+name: Terraform Cost & Risk Analysis
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  tfx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run tfx
+        uses: amtago/infra-cost-risk-adviser@main
+        with:
+          plan-file:        plan.json
+          region:           us-east-1
+          github-token:     ${{ secrets.GITHUB_TOKEN }}
+          comment-on-pr:    'true'
+          fail-on-critical: 'false'
